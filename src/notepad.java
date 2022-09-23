@@ -105,6 +105,7 @@ public class notepad extends JFrame{
         topMenu.add(file);
         this.add(topMenu, BorderLayout.NORTH);
 
+
         //Input area
         input = new JTextArea();
 
@@ -155,6 +156,9 @@ public class notepad extends JFrame{
         timeAndDate.setPreferredSize(new Dimension(300,30));
         timeAndDate.setEditable(false);
         timeAndDate.setBackground(new Color(238,238,238));
+
+        timeAndDate.setHorizontalAlignment(JTextField.RIGHT);
+
         timeAndDate.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
                 238)));
 
