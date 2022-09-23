@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import java.awt.*;
@@ -104,6 +105,7 @@ public class notepad extends JFrame{
         topMenu.add(file);
         this.add(topMenu, BorderLayout.NORTH);
 
+
         //Input area
         input = new JTextArea();
 
@@ -122,10 +124,11 @@ public class notepad extends JFrame{
         //left part of status bar
         leftPart = new JTextField("Line: 1, Column: 1");
         leftPart.setLayout(null);
-        leftPart.setPreferredSize(new Dimension(200,30));
+        leftPart.setPreferredSize(new Dimension(270,30));
         leftPart.setEditable(false);
         leftPart.setBackground(new Color(238,238,238));
-
+        leftPart.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
+                238)));
 
         //cursor position
         input.addCaretListener(new CaretListener() {
@@ -152,6 +155,9 @@ public class notepad extends JFrame{
         timeAndDate.setPreferredSize(new Dimension(300,30));
         timeAndDate.setEditable(false);
         timeAndDate.setBackground(new Color(238,238,238));
+        timeAndDate.setHorizontalAlignment(JTextField.RIGHT);
+        timeAndDate.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
+                238)));
 
         statusBar.add(timeAndDate);
 
