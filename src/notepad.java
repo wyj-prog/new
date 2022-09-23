@@ -12,6 +12,7 @@ import java.util.Date;
 public class notepad extends JFrame{
 
     public static void main(String[] args) {
+        System.out.println("adad");
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
 //        new notepad();
