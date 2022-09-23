@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class notepad extends JFrame{
 
+    //Main function
     public static void main(String[] args) {
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
