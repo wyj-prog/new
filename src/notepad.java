@@ -79,7 +79,7 @@ public class notepad extends JFrame{
         //File Menu
         file = new JMenu("File");
 
-        New = new JMenuItem("New                ");
+        New = new JMenuItem("New            ");
         open = new JMenuItem("Open");
         save = new JMenuItem("Save");
 
@@ -92,7 +92,7 @@ public class notepad extends JFrame{
         //Search Menu
         search = new JMenu("Search");
 
-        searchItem = new JMenuItem("Search              ");
+        searchItem = new JMenuItem("Search          ");
         previous = new JMenuItem("Previous");
         next = new JMenuItem("Next");
 
@@ -106,7 +106,8 @@ public class notepad extends JFrame{
 
         view = new JMenu("View");
 
-        statusBarInvisibility = new JMenuItem("Status Bar               ");
+        statusBarInvisibility = new JMenuItem("Status Bar         √");
+        statusBarInvisibility.addActionListener(new statusBarInvisibility());
         scaleUp = new JMenuItem("Scale up");
         scaleDown = new JMenuItem("Scale down");
 
@@ -119,7 +120,7 @@ public class notepad extends JFrame{
         //Manage Menu
         manage = new JMenu("Manage");
 
-        copy = new JMenuItem("Copy              ");
+        copy = new JMenuItem("Copy          ");
         paste = new JMenuItem("Paste");
         cut = new JMenuItem("Cut");
         print = new JMenuItem("Print");
@@ -138,7 +139,7 @@ public class notepad extends JFrame{
 
         help= new JMenu("Help");
 
-        about = new JMenuItem("About                ");
+        about = new JMenuItem("About            ");
 
         help.add(about);
 
@@ -229,4 +230,20 @@ public class notepad extends JFrame{
             timeAndDate.setText(formatter.format(new Date()));
         }
     }
+
+    class statusBarInvisibility implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(statusBarInvisibility.getText().equals("Status Bar         √")){
+                statusBar.setVisible(false);
+                statusBarInvisibility.setText("Status Bar           ");
+            }else{
+                statusBar.setVisible(true);
+                statusBarInvisibility.setText("Status Bar         √");
+            }
+
+
+        }
+    }
+
 }
