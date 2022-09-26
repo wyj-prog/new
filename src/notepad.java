@@ -18,8 +18,8 @@ public class notepad extends JFrame{
     }
 
 
-    //The window
-//    public static JFrame no;
+
+
 
     //Input Area
     public static JTextArea input;
@@ -63,7 +63,7 @@ public class notepad extends JFrame{
     public static JTextField leftPart;
 
     //time&date
-    SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+
 
     public notepad() {
 
@@ -107,7 +107,7 @@ public class notepad extends JFrame{
         view = new JMenu("View");
 
         statusBarInvisibility = new JMenuItem("Status Bar         √");
-        statusBarInvisibility.addActionListener(new statusBarInvisibility());
+        statusBarInvisibility.addActionListener(new funtions.statusBarInvisibility());
         scaleUp = new JMenuItem("Scale up");
         scaleDown = new JMenuItem("Scale down");
 
@@ -140,6 +140,7 @@ public class notepad extends JFrame{
         help= new JMenu("Help");
 
         about = new JMenuItem("About            ");
+        about.addActionListener(new funtions.aboutFrame());
 
         help.add(about);
 
@@ -198,7 +199,7 @@ public class notepad extends JFrame{
         //time&date
         //Real-time display
         timeAndDate = new JTextField();
-        timeAndDate.addActionListener(new TimeActionListener());
+        timeAndDate.addActionListener(new funtions.TimeActionListener());
         timeAndDate.setPreferredSize(new Dimension(300,30));
         timeAndDate.setEditable(false);
         timeAndDate.setBackground(new Color(238,238,238));
@@ -212,38 +213,22 @@ public class notepad extends JFrame{
 
         this.add(statusBar, BorderLayout.SOUTH);
 
-        //At last
+
+        //screen parameter
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenWidth = screenSize.width/2;
+        int screenHeight = screenSize.height/2;
+        int height = this.getHeight();
+        int width = this.getWidth();
+        this.setLocation(screenWidth-width/2, screenHeight-height/2);
+
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
 
 
-    class TimeActionListener implements ActionListener {
-        public TimeActionListener(){
-            Timer t=new Timer(1000, this);
-            t.start();
-        }
 
-        @Override
-        public void actionPerformed(ActionEvent ae){
-            timeAndDate.setText(formatter.format(new Date()));
-        }
-    }
-
-    class statusBarInvisibility implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(statusBarInvisibility.getText().equals("Status Bar         √")){
-                statusBar.setVisible(false);
-                statusBarInvisibility.setText("Status Bar           ");
-            }else{
-                statusBar.setVisible(true);
-                statusBarInvisibility.setText("Status Bar         √");
-            }
-
-
-        }
-    }
 
 }
