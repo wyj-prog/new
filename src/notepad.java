@@ -78,32 +78,77 @@ public class notepad extends JFrame{
 
 
         //File Menu
-        file = new JMenu("File(F)");
-        file.setMnemonic('F');//Alt + 'F'
+        file = new JMenu("File");
 
-        New = new JMenuItem("New(N)");
-        file.setMnemonic('N');
-
-        open = new JMenuItem("Open(O)");
-        file.setMnemonic('O');
-
-        save = new JMenuItem("Save(S)");
-        file.setMnemonic('S');
+        New = new JMenuItem("New                ");
+        open = new JMenuItem("Open");
+        save = new JMenuItem("Save");
 
         file.add(New);
         file.add(open);
         file.add(save);
 
-        //Search Menu
+        topMenu.add(file);
 
-        //Manage Menu
+        //Search Menu
+        search = new JMenu("Search");
+
+        searchItem = new JMenuItem("Search              ");
+        previous = new JMenuItem("Previous");
+        next = new JMenuItem("Next");
+
+        search.add(searchItem);
+        search.add(previous);
+        search.add(next);
+
+        topMenu.add(search);
 
         //View Menu
 
+        view = new JMenu("View");
+
+        statusBarInvisibility = new JMenuItem("Status Bar               ");
+        scaleUp = new JMenuItem("Scale up");
+        scaleDown = new JMenuItem("Scale down");
+
+        view.add(statusBarInvisibility);
+        view.add(scaleUp);
+        view.add(scaleDown);
+
+        topMenu.add(view);
+
+        //Manage Menu
+        manage = new JMenu("Manage");
+
+        copy = new JMenuItem("Copy              ");
+        paste = new JMenuItem("Paste");
+        cut = new JMenuItem("Cut");
+        print = new JMenuItem("Print");
+        export = new JMenuItem("Export");
+
+        manage.add(copy);
+        manage.add(paste);
+        manage.add(cut);
+        manage.add(print);
+        manage.add(export);
+
+        topMenu.add(manage);
+
+
         //Help Menu
 
+        help= new JMenu("Help");
+
+        about = new JMenuItem("About                ");
+
+        help.add(about);
+
+        topMenu.add(help);
+
+
+
         //topMenu construct
-        topMenu.add(file);
+
         this.add(topMenu, BorderLayout.NORTH);
 
 
