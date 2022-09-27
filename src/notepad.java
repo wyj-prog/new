@@ -32,6 +32,7 @@ public class notepad extends JFrame{
     public static JMenuItem New;
     public static JMenuItem open;
     public static JMenuItem save;
+    public static JMenuItem exit;
 
     //Search
     public static JMenu search;
@@ -41,6 +42,7 @@ public class notepad extends JFrame{
 
     //Manage
     public static JMenu manage;
+    public static JMenuItem selectAll;
     public static JMenuItem copy;
     public static JMenuItem paste;
     public static JMenuItem cut;
@@ -82,10 +84,12 @@ public class notepad extends JFrame{
         New = new JMenuItem("New            ");
         open = new JMenuItem("Open");
         save = new JMenuItem("Save");
+        exit = new JMenuItem("Exit");
 
         file.add(New);
         file.add(open);
         file.add(save);
+        file.add(exit);
 
         topMenu.add(file);
 
@@ -120,12 +124,14 @@ public class notepad extends JFrame{
         //Manage Menu
         manage = new JMenu("Manage");
 
+        selectAll = new JMenuItem("Select all");
         copy = new JMenuItem("Copy          ");
         paste = new JMenuItem("Paste");
         cut = new JMenuItem("Cut");
         print = new JMenuItem("Print");
         export = new JMenuItem("Export");
 
+        manage.add(selectAll);
         manage.add(copy);
         manage.add(paste);
         manage.add(cut);
