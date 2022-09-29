@@ -16,12 +16,12 @@ public class Print extends JFrame {
                 //set print format
                 DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
                 //Find all available print services
-                PrintService printService[] = PrintServiceLookup.lookupPrintServices(flavor, pras);
+                PrintService[] printService = PrintServiceLookup.lookupPrintServices(flavor, pras);
                 PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
                 //Display the print dialog
                 PrintService service = null;
                 service = ServiceUI.printDialog(null,150, 150, printService, defaultService, flavor, pras);
-                if (service!=null)//
+                if (service!=null)
                 {
                     //Create a print job
                     DocPrintJob job = service.createPrintJob();
