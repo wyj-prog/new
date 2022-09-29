@@ -64,7 +64,7 @@ public class notepad extends JFrame{
     public static JTextField timeAndDate;
     public static JTextField leftPart;
 
-    //time&date
+
 
 
     public notepad() {
@@ -97,8 +97,11 @@ public class notepad extends JFrame{
         search = new JMenu("Search");
 
         searchItem = new JMenuItem("Search          ");
+        searchItem.addActionListener(new search.searchFrame());
         previous = new JMenuItem("Previous");
+        previous.addActionListener(new search.searchFrameP());
         next = new JMenuItem("Next");
+        next.addActionListener(new search.searchFrameN());
 
         search.add(searchItem);
         search.add(previous);
@@ -146,7 +149,7 @@ public class notepad extends JFrame{
         help= new JMenu("Help");
 
         about = new JMenuItem("About            ");
-        about.addActionListener(new funtions.aboutFrame());
+        about.addActionListener(new about.aboutFrame());
 
         help.add(about);
 

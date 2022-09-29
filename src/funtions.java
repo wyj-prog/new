@@ -34,12 +34,7 @@ public class funtions {
         }
     }
 
-    static class aboutFrame implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            about about = new about();
-        }
-    }
+
 
 
 }
