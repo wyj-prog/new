@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -41,5 +42,24 @@ public class funtions {
         }
     }
 
+    static class PrintButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new Print();
+        }
+    }
 
+    public static int getScreenWidth(){
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenWidth = screenSize.width;
+        return screenWidth;
+    }
+
+    public static int getScreenHeight(){
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = kit.getScreenSize();
+        int screenHeight = screenSize.height;
+        return screenHeight;
+    }
 }

@@ -129,6 +129,7 @@ public class notepad extends JFrame{
         paste = new JMenuItem("Paste");
         cut = new JMenuItem("Cut");
         print = new JMenuItem("Print");
+        print.addActionListener(new funtions.PrintButton());
         export = new JMenuItem("Export");
 
         manage.add(selectAll);
