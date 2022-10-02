@@ -1,13 +1,10 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
-public class funtions {
+public class miniFunctions {
     //Dynamic time display
     static class TimeActionListener implements ActionListener {
         public TimeActionListener(){
@@ -36,7 +33,6 @@ public class funtions {
     }
 
 
-
     static class PrintButton implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -44,17 +40,5 @@ public class funtions {
         }
     }
 
-    public static int getScreenWidth(){
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        return screenWidth;
-    }
 
-    public static int getScreenHeight(){
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        return screenHeight;
-    }
 }

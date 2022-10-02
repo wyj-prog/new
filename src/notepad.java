@@ -3,10 +3,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class notepad extends JFrame{
@@ -14,7 +12,6 @@ public class notepad extends JFrame{
     public static void main(String[] args) {
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        new notepad();
     }
 
 
@@ -58,6 +55,13 @@ public class notepad extends JFrame{
     //Help
     public static JMenu help;
     public static JMenuItem about;
+
+    //popMenu
+    public static JPopupMenu rClick;
+    public static JMenuItem selectAllR;
+    public static JMenuItem copyR;
+    public static JMenuItem pasteR;
+    public static JMenuItem cutR;
 
     //Status Bar
     public static JPanel statusBar;
@@ -114,7 +118,7 @@ public class notepad extends JFrame{
         view = new JMenu("View");
 
         statusBarInvisibility = new JMenuItem("Status Bar         √");
-        statusBarInvisibility.addActionListener(new funtions.statusBarInvisibility());
+        statusBarInvisibility.addActionListener(new miniFunctions.statusBarInvisibility());
         scaleUp = new JMenuItem("Scale up");
         scaleDown = new JMenuItem("Scale down");
 
@@ -127,12 +131,12 @@ public class notepad extends JFrame{
         //Manage Menu
         manage = new JMenu("Manage");
 
-        selectAll = new JMenuItem("Select all");
-        copy = new JMenuItem("Copy          ");
+        selectAll = new JMenuItem("Select all           ");
+        copy = new JMenuItem("Copy");
         paste = new JMenuItem("Paste");
         cut = new JMenuItem("Cut");
         print = new JMenuItem("Print");
-        print.addActionListener(new funtions.PrintButton());
+        print.addActionListener(new miniFunctions.PrintButton());
         export = new JMenuItem("Export");
 
         manage.add(selectAll);
@@ -165,6 +169,15 @@ public class notepad extends JFrame{
 
         //Input area
         input = new JTextArea();
+
+        input.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton()==MouseEvent.BUTTON3){
+                    rClick.show(notepad.this,e.getX(), e.getY()+30);
+                }
+            }
+        });
 
         JScrollPane scroller = new JScrollPane();
         scroller.setBounds(20,20,100,50);
@@ -209,7 +222,7 @@ public class notepad extends JFrame{
         //time&date
         //Real-time display
         timeAndDate = new JTextField();
-        timeAndDate.addActionListener(new funtions.TimeActionListener());
+        timeAndDate.addActionListener(new miniFunctions.TimeActionListener());
         timeAndDate.setPreferredSize(new Dimension(300,30));
         timeAndDate.setEditable(false);
         timeAndDate.setBackground(new Color(238,238,238));
@@ -223,18 +236,23 @@ public class notepad extends JFrame{
 
         this.add(statusBar, BorderLayout.SOUTH);
 
+        //pop menu
+        rClick = new JPopupMenu();
 
-        //screen parameter
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width/2;
-        int screenHeight = screenSize.height/2;
-        int height = this.getHeight();
-        int width = this.getWidth();
-        this.setLocation(screenWidth-width/2, screenHeight-height/2);
+        selectAllR = new JMenuItem("Select all           ");
+        copyR = new JMenuItem("Copy");
+        pasteR = new JMenuItem("Paste");
+        cutR = new JMenuItem("Cut");
+
+        rClick.add(selectAllR);
+        rClick.add(copyR);
+        rClick.add(pasteR);
+        rClick.add(cutR);
+
 
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
     }
 
 
