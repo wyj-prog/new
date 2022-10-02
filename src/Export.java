@@ -12,6 +12,8 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import javax.swing.*;
+
 public class Export {
 
         public Export() throws IOException {
@@ -74,7 +76,7 @@ public class Export {
                 int count_lines = 0;
                 int need_new_page = 0;
                 int current_line = 0;
-                for (int i = 1; i <= lines.size() / 47; i ++){
+                for (int i = 1; i <= lines.size() / 47 + 1; i ++){
                     for ( ; current_line < lines.size();)
                     {
                         contentStream.showText(lines.get(current_line));
@@ -103,7 +105,9 @@ public class Export {
             }finally {
                 if (doc != null) {
                     doc.close();
+                    new JOptionPane("Error when exporting the file");
                 }
+                new JOptionPane("Exported successfully. The file name is Print.pdf");
             }
         }
 }
