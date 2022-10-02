@@ -61,6 +61,16 @@ public class miniFunctions {
         public void actionPerformed(ActionEvent e) { notepad.input.paste();}
     }
 
+    static class ExportButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e1) {
+            try {
+                new Export();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
     public static int getScreenWidth(){
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
