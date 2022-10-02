@@ -249,7 +249,10 @@ public class notepad extends JFrame{
         rClick.add(pasteR);
         rClick.add(cutR);
 
-
+        //screen parameter
+        int height = this.getHeight();
+        int width = this.getWidth();
+        this.setLocation(miniFunctions.getScreenWidth()/2-width/2, miniFunctions.getScreenHeight()/2-height/2);
         this.setVisible(true);
 
 
