@@ -127,12 +127,17 @@ public class notepad extends JFrame{
         manage = new JMenu("Manage");
 
         selectAll = new JMenuItem("Select all           ");
+        selectAll.addActionListener(new miniFunctions.SelectAllButton());
         copy = new JMenuItem("Copy");
+        copy.addActionListener(new miniFunctions.CopyButton());
         paste = new JMenuItem("Paste");
+        paste.addActionListener(new miniFunctions.PasteButton());
         cut = new JMenuItem("Cut");
+        cut.addActionListener(new miniFunctions.CutButton());
         print = new JMenuItem("Print");
         print.addActionListener(new miniFunctions.PrintButton());
         export = new JMenuItem("Export");
+        export.addActionListener(new miniFunctions.ExportButton());
 
         manage.add(selectAll);
         manage.add(copy);
