@@ -225,13 +225,9 @@ public class notepad extends JFrame{
 
 
         //screen parameter
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width/2;
-        int screenHeight = screenSize.height/2;
         int height = this.getHeight();
         int width = this.getWidth();
-        this.setLocation(screenWidth-width/2, screenHeight-height/2);
+        this.setLocation(funtions.getScreenWidth()/2-width/2, funtions.getScreenHeight()/2-height/2);
 
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
