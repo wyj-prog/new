@@ -1,7 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,9 +11,6 @@ public class notepad extends JFrame{
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-
-
-
 
 
     //Input Area
@@ -103,9 +98,9 @@ public class notepad extends JFrame{
         searchItem = new JMenuItem("Search          ");
         searchItem.addActionListener(new search.searchFrame());
         previous = new JMenuItem("Previous");
-        previous.addActionListener(new search.searchFrameP());
+        previous.addActionListener(new search.searchingUp());
         next = new JMenuItem("Next");
-        next.addActionListener(new search.searchFrameN());
+        next.addActionListener(new search.searchingDown());
 
         search.add(searchItem);
         search.add(previous);
@@ -174,7 +169,7 @@ public class notepad extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton()==MouseEvent.BUTTON3){
-                    rClick.show(notepad.this,e.getX(), e.getY()+30);
+                    rClick.show(notepad.this,e.getX()+10, e.getY()+55);
                 }
             }
         });
@@ -202,18 +197,16 @@ public class notepad extends JFrame{
 
 
         //cursor position
-        input.addCaretListener(new CaretListener() {
-            public void caretUpdate(CaretEvent e) {
-                try {
+        input.addCaretListener(e -> {
+            try {
 
-                    int offset = e.getDot() ;
-                    int row = input.getLineOfOffset(offset);
-                    int column = e.getDot() - input.getLineStartOffset(row);
-                    leftPart.setText("Line: " + (row + 1) + ", Column: " + (column+1));
+                int offset = e.getDot() ;
+                int row = input.getLineOfOffset(offset);
+                int column = e.getDot() - input.getLineStartOffset(row);
+                leftPart.setText("Line: " + (row + 1) + ", Column: " + (column+1));
 
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
