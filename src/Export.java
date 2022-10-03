@@ -39,8 +39,6 @@ public class Export extends JFrame {
                 List<String> lines = new ArrayList<String>();
                 String temp = "";
                 for (int i = 0; i < text.length(); i++){
-                    System.out.println(text.charAt(i));
-                    System.out.println(i);
                     if (text.charAt(i) == '\n' || text.charAt(i) == '\r'){
                         // If this is the end of the document
                         if(i + 1 == text.length()){ // last one
