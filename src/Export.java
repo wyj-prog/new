@@ -14,9 +14,9 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import javax.swing.*;
 
-public class Export {
+public class Export extends JFrame {
 
-        public Export() throws IOException {
+        public Export() throws IOException{
             PDDocument doc = null;
             try
             {
@@ -105,9 +105,9 @@ public class Export {
             }finally {
                 if (doc != null) {
                     doc.close();
-                    new JOptionPane("Error when exporting the file");
-                }
-                new JOptionPane("Exported successfully. The file name is Print.pdf");
+                    JOptionPane.showMessageDialog(null, "Successfully exported the text file to Print.pdf", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }else
+                JOptionPane.showMessageDialog(null, "Error occured", "alert", JOptionPane.ERROR_MESSAGE);
             }
         }
 }
