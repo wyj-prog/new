@@ -40,6 +40,7 @@ public class Export extends JFrame {
                 String temp = "";
                 for (int i = 0; i < text.length(); i++){
                     System.out.println(text.charAt(i));
+                    System.out.println(i);
                     if (text.charAt(i) == '\n' || text.charAt(i) == '\r'){
                         // If this is the end of the document
                         if(i + 1 == text.length()){ // last one
@@ -53,14 +54,14 @@ public class Export extends JFrame {
                                 if (i + 1 < text.length()){
                                     i = i + 1;
                                     count ++;
-                                }
+                                }else break;
                             }
                             lines.add(temp);
                             for (int newline = 1; newline <= (int)count; newline++){
                                 temp = "";
                                 lines.add(temp);
                             }
-                            if (i + 1 > text.length()) break;
+                            if (i + 1 == text.length()) break;
                             else {
                                 //if (count > 0) i++;
                                 i = i - 1;
@@ -76,29 +77,44 @@ public class Export extends JFrame {
                 int count_lines = 0;
                 int need_new_page = 0;
                 int current_line = 0;
-                for (int i = 1; i <= lines.size() / 47 + 1; i ++){
-                    for ( ; current_line < lines.size();)
+                for (int i = 1; i <= lines.size() / 47 + 1 ; i ++){
+                    while (current_line < lines.size())
                     {
-                        contentStream.showText(lines.get(current_line));
-                        contentStream.newLine();
-                        contentStream.newLineAtOffset(0, -leading);
+                        //Judging whether the line is too long
+                        if (lines.get(current_line).length() > 130){
+                            int plus_one;
+                            plus_one = lines.get(current_line).length() % 130 == 0 ? 0 : 1;
+                            int rows = lines.get(current_line).length() / 130 + plus_one;
+                            int current_position = 0;
+                            for (int count = 1; count < rows; count++){
+                                contentStream.showText(lines.get(current_line).substring(current_position, current_position + 130));
+                                contentStream.newLine();
+                                contentStream.newLineAtOffset(0, -leading);
+                                current_position += 131;
+                            }
+                            contentStream.showText(lines.get(current_line).substring(current_position, lines.get(current_line).length()));
+                            contentStream.newLine();
+                            contentStream.newLineAtOffset(0, -leading);
+                        }else {
+                            contentStream.showText(lines.get(current_line));
+                            contentStream.newLine();
+                            contentStream.newLineAtOffset(0, -leading);
+                        }
                         current_line++;
                         if ((current_line % 47) == 0) break;
                     }
                     contentStream.endText();
                     contentStream.close();
-                    PDPage newpage = new PDPage();
-                    doc.addPage( newpage );
-                    contentStream = new PDPageContentStream(doc, newpage);
-                    contentStream.beginText();
-                    contentStream.setFont(pdfFont, fontSize);
-                    contentStream.newLineAtOffset(startX, startY);
-                    count_lines = 0;
+                    if (current_line != lines.size()) {
+                        PDPage newpage = new PDPage();
+                        doc.addPage(newpage);
+                        contentStream = new PDPageContentStream(doc, newpage);
+                        contentStream.beginText();
+                        contentStream.setFont(pdfFont, fontSize);
+                        contentStream.newLineAtOffset(startX, startY);
+                        count_lines = 0;
+                    }
                 }
-
-                contentStream.endText();
-                contentStream.close();
-
                 doc.save(new File("Print.pdf"));
             }catch (Exception e) {
                 e.printStackTrace();
@@ -111,3 +127,4 @@ public class Export extends JFrame {
             }
         }
 }
+
