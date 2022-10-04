@@ -5,6 +5,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,6 +37,41 @@ public class miniFunctions {
             }
         }
     }
+
+    static class scale extends MouseAdapter {
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e){
+            if(e.isControlDown()){
+                Font f = notepad.input.getFont();
+                if(e.getWheelRotation()<0){
+                    notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()+1));
+                }else if(e.getWheelRotation()>0){
+                    notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()-1));
+                }
+            }else{
+                notepad.scroller.addMouseWheelListener(notepad.sysWheel);
+                notepad.sysWheel.mouseWheelMoved(e);
+                notepad.scroller.removeMouseWheelListener(notepad.sysWheel);
+            }
+        }
+    }
+
+    static class scaleUp implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Font f = notepad.input.getFont();
+            notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()+1));
+        }
+    }
+
+    static class scaleDown implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Font f = notepad.input.getFont();
+            notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()-1));
+        }
+    }
+
 
 
     static class PrintButton implements ActionListener {
