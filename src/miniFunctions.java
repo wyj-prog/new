@@ -49,9 +49,9 @@ public class miniFunctions {
                     notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()-1));
                 }
             }else{
-                notepad.scroller.addMouseWheelListener(notepad.sysWheel);
-                notepad.sysWheel.mouseWheelMoved(e);
-                notepad.scroller.removeMouseWheelListener(notepad.sysWheel);
+//                notepad.scroller.addMouseWheelListener(notepad.sysWheel);
+//                notepad.sysWheel.mouseWheelMoved(e);
+//                notepad.scroller.removeMouseWheelListener(notepad.sysWheel);
             }
         }
     }

@@ -20,8 +20,6 @@ public class notepad extends JFrame{
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
-
-
     //Input Area
     public static JTextArea input;
 
