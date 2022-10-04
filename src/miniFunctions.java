@@ -7,6 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseWheelEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -128,10 +132,8 @@ public class miniFunctions {
     public static String getClipboardString() {
         // 获取系统剪贴板
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
         // 获取剪贴板中的内容
         Transferable trans = clipboard.getContents(null);
-
         if (trans != null) {
             // 判断剪贴板中的内容是否支持文本
             if (trans.isDataFlavorSupported(DataFlavor.stringFlavor)) {
@@ -146,5 +148,58 @@ public class miniFunctions {
         }
 
         return null;
+    }
+
+
+    private static JFileChooser fileChooser;
+    static class OpenButton implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e1) {
+
+            try {
+                fileChooser = new JFileChooser();
+                int i = fileChooser.showOpenDialog(notepad.open); // Show the open file dialog
+                if (i == JFileChooser.APPROVE_OPTION) { // Click on the dialog box to open the option
+                    File f = fileChooser.getSelectedFile(); // get selected file
+                    try {
+                        FileReader is = new FileReader(f); // get file input stream
+                        notepad.input.read(is, f); // read file into text pane
+                    } catch (Exception ex) {
+                        ex.printStackTrace(); // output error message
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static class NewButton extends JFrame implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e){
+            try{
+                if (!notepad.input.getText().equals("")){
+                    int choice = JOptionPane.showConfirmDialog(null,"This file has been changed.\nDo you want to save this file? ");
+                    switch (choice){
+                        case 0:
+                            // Yes option
+                            JOptionPane.showMessageDialog(null, "Saved");
+                            break;
+                        case 1:
+                            // No option
+                            notepad.input.setText("");
+                            break;
+                        case -1:
+                            // Close option
+                            break;
+                        case 2:
+                            // Cancel option
+                            break;
+                    }
+                }
+            }catch (Exception e2){
+                e2.printStackTrace();
+            }
+        }
     }
 }
