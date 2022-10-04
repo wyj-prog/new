@@ -277,10 +277,16 @@ public class notepad extends JFrame{
         pasteR = new JMenuItem("Paste");
         cutR = new JMenuItem("Cut");
 
+        selectAllR.addActionListener(new miniFunctions.SelectAllButton());
+        copyR.addActionListener(new miniFunctions.CopyButton());
+        pasteR.addActionListener(new miniFunctions.PasteButton());
+        cutR.addActionListener(new miniFunctions.CutButton());
+
         rClick.add(selectAllR);
         rClick.add(copyR);
         rClick.add(pasteR);
         rClick.add(cutR);
+
 
         //screen parameter
         int height = this.getHeight();
