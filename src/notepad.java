@@ -186,6 +186,23 @@ public class notepad extends JFrame{
                     if (miniFunctions.getClipboardString() == null){
                         pasteR.setEnabled(false);
                     }
+                    if (input.getText().equals("")){
+                        selectAllR.setEnabled(false);
+                    }
+                }
+            }
+        });
+
+        manage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    if (miniFunctions.getClipboardString() == null){
+                        paste.setEnabled(false);
+                    }
+                    if (input.getText().equals("")){
+                        selectAll.setEnabled(false);
+                    }
                 }
             }
         });
