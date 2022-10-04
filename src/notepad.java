@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -7,6 +9,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 
@@ -131,6 +135,17 @@ public class notepad extends JFrame{
         //Manage Menu
         manage = new JMenu("Manage");
 
+        manage.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1){
+                    if (miniFunctions.getClipboardString() == null){
+                        paste.setEnabled(false);
+                    }
+                }
+            }
+        });
+
         selectAll = new JMenuItem("Select all           ");
         selectAll.addActionListener(new miniFunctions.SelectAllButton());
         copy = new JMenuItem("Copy");
@@ -182,7 +197,6 @@ public class notepad extends JFrame{
                     rClick.show(notepad.this, e.getX() + 10, e.getY() + 55);
                     if (miniFunctions.getClipboardString() == null){
                         pasteR.setEnabled(false);
-                        copy.setEnabled(false);
                     }
                 }
             }
