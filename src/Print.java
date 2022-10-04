@@ -9,31 +9,18 @@ import java.awt.print.*;
 
 public class Print extends JFrame {
     public Print(){
-        //Invoke the print dialog to print the document to the user
-            try{
-                //Build a print property set
-                PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-                //set print format
-                DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
-                //Find all available print services
-                PrintService[] printService = PrintServiceLookup.lookupPrintServices(flavor, pras);
-                PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
-                //Display the print dialog
-                PrintService service = null;
-                service = ServiceUI.printDialog(null,150, 150, printService, defaultService, flavor, pras);
-                if (service!=null)
-                {
-                    //Create a print job
-                    DocPrintJob job = service.createPrintJob();
-                    DocAttributeSet das = new HashDocAttributeSet();
-                    //Create a print file format
-                    Doc doc = new SimpleDoc(notepad.input.getText().getBytes(), flavor, das);
-                    //print file
-                    job.print(doc, pras);
-                }
-            }catch(Exception e)
-            {
-                JOptionPane.showMessageDialog(this,"Print operation did not finished successfully.");
-            }
+        try{
+            PageFormat pf = new PageFormat();
+            PrinterJob.getPrinterJob().pageDialog(pf);
+            PrintJob p = getToolkit().getPrintJob(this,"ok",null);
+            Graphics g = p.getGraphics();//p Get a Graphics object for printing
+            g.translate(120,200);// Change the position of the object
+            notepad.input.printAll(g);
+            p.end();// Release the object g
         }
+        catch(Exception a){
+            a.printStackTrace();
+            new JOptionPane("This operation did not complete successfully");
+        }
+    }
 }
