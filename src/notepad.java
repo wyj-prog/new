@@ -185,7 +185,6 @@ public class notepad extends JFrame{
                     rClick.show(notepad.this, e.getX() + 10, e.getY() + 55);
                     if (miniFunctions.getClipboardString() == null){
                         pasteR.setEnabled(false);
-                        copy.setEnabled(false);
                     }
                 }
             }
