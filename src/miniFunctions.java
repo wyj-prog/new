@@ -28,12 +28,12 @@ public class miniFunctions {
     static class statusBarInvisibility implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(notepad.statusBarInvisibility.getText().equals("Status Bar         √")){
+            if(notepad.statusBarInvisibility.getText().equals("Status Bar             √")){
                 notepad.statusBar.setVisible(false);
                 notepad.statusBarInvisibility.setText("Status Bar           ");
             }else{
                 notepad.statusBar.setVisible(true);
-                notepad.statusBarInvisibility.setText("Status Bar         √");
+                notepad.statusBarInvisibility.setText("Status Bar             √");
             }
         }
     }
