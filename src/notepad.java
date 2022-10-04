@@ -7,6 +7,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 
 
@@ -20,6 +21,8 @@ public class notepad extends JFrame{
 
     //Input Area
     public static JTextArea input;
+    public static JScrollPane scroller;
+    public static MouseWheelListener sysWheel;
 
     //The menu bar at the top
     public static JMenuBar topMenu;
@@ -117,10 +120,12 @@ public class notepad extends JFrame{
 
         view = new JMenu("View");
 
-        statusBarInvisibility = new JMenuItem("Status Bar         √");
+        statusBarInvisibility = new JMenuItem("Status Bar             √");
         statusBarInvisibility.addActionListener(new miniFunctions.statusBarInvisibility());
-        scaleUp = new JMenuItem("Scale up");
-        scaleDown = new JMenuItem("Scale down");
+        scaleUp = new JMenuItem("Scale up                Ctrl + wheel-up");
+        scaleUp.addActionListener(new miniFunctions.scaleUp());
+        scaleDown = new JMenuItem("Scale down           Ctrl + wheel-down");
+        scaleDown.addActionListener(new miniFunctions.scaleDown());
 
         view.add(statusBarInvisibility);
         view.add(scaleUp);
@@ -188,11 +193,14 @@ public class notepad extends JFrame{
             }
         });
 
-        JScrollPane scroller = new JScrollPane();
+        scroller = new JScrollPane();
         scroller.setBounds(20,20,100,50);
         scroller.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scroller.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroller.setViewportView(input);
+        sysWheel = scroller.getMouseWheelListeners()[0];
+        scroller.removeMouseWheelListener(sysWheel);
+        scroller.addMouseWheelListener(new miniFunctions.scale());
 
         this.add(scroller);
 
