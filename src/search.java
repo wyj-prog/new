@@ -198,10 +198,7 @@ public class search extends JFrame {
     static class searching implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(Objects.equals(target, "")){
-                JOptionPane.showMessageDialog(null, "No searching target.", "Error",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
+
             searchMethod();
         }
     }
@@ -252,6 +249,10 @@ public class search extends JFrame {
         target = inputS.getText();
         String text;
         String targetS;
+        if(Objects.equals(target, "")){
+            JOptionPane.showMessageDialog(null, "No searching target.", "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 
         if (caseSensitive.isSelected()) {
             text = notepad.input.getText();

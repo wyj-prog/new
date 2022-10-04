@@ -60,7 +60,7 @@ public class notepad extends JFrame{
 
     //Status Bar
     public static JPanel statusBar;
-    public static JTextField timeAndDate;
+    public static JMenu timeAndDate;
     public static JTextField leftPart;
 
 
@@ -192,9 +192,9 @@ public class notepad extends JFrame{
 
 
         //left part of status bar
-        leftPart = new JTextField("Line: 1, Column: 1");
+        leftPart = new JTextField("Line: 1          Column: 1           Word Count: 0");
         leftPart.setLayout(null);
-        leftPart.setPreferredSize(new Dimension(270,30));
+        leftPart.setPreferredSize(new Dimension(250,25));
         leftPart.setEditable(false);
         leftPart.setBackground(new Color(238,238,238));
         leftPart.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
@@ -204,33 +204,34 @@ public class notepad extends JFrame{
         //cursor position
         input.addCaretListener(e -> {
             try {
+                String text = input.getText();
+                String trimmedLine = text.trim();
+                int count = trimmedLine.isEmpty() ? 0 : trimmedLine.split("\\s+").length;
+
 
                 int offset = e.getDot() ;
                 int row = input.getLineOfOffset(offset);
                 int column = e.getDot() - input.getLineStartOffset(row);
-                leftPart.setText("Line: " + (row + 1) + ", Column: " + (column+1));
-
+                leftPart.setText("Line: " + (row + 1) + "           Column: " + (column+1) + "          Word Count: " + count);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
+
+        statusBar.setLayout(new FlowLayout());
         statusBar.add(leftPart);
 
         //time&date
         //Real-time display
-        timeAndDate = new JTextField();
+        timeAndDate = new JMenu();
         timeAndDate.addActionListener(new miniFunctions.TimeActionListener());
-        timeAndDate.setPreferredSize(new Dimension(300,30));
-        timeAndDate.setEditable(false);
-        timeAndDate.setBackground(new Color(238,238,238));
+        timeAndDate.setPreferredSize(new Dimension(180,30));
+        timeAndDate.setEnabled(false);
 
-        timeAndDate.setHorizontalAlignment(JTextField.RIGHT);
 
-        timeAndDate.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
-                238)));
-
-        statusBar.add(timeAndDate);
+        topMenu.add(Box.createHorizontalGlue());
+        topMenu.add(timeAndDate);
 
         this.add(statusBar, BorderLayout.SOUTH);
 
