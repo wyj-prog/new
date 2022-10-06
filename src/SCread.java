@@ -8,7 +8,7 @@ public class SCread {
     public static String[] blue = {"void", "byte", "char", "short", "Short", "integer", "long", "float", "double","String[]","String","File",
             "boolean", "String", "Float", "Double", "Long", "Integer", "Boolean", "bool", "char", "int", "unsigned", "signed",
             "short", "long", "from", "global", "in", "is", "List", "Tuple", "Dictionary", "Set", "Number", "delete", "do", "dynamic_cast", "else", "enum", "explicit", "export",
-            "for", "friend", "JFrame", "JPane", "JLabel", "JTextFiled", "JTextPanel", "JButton","JMenu", "JMenuItem", "JPopMenu","JMenuBar","JFileChooser"};
+            "for", "friend", "JFrame", "JPane", "JLabel", "JTextFiled", "JTextPanel", "JButton","JMenu", "JMenuItem", "JPopMenu","JMenuBar","JFileChooser", "JScrollPane"};
 
     public static String[] cyan = {"abstract", "class", "extends", "final", "implements", "interface", "native", "new", "static", "lambda", "None",
             "nonlocal", "not", "inlines", "mutable", "new", "operator", "System"};

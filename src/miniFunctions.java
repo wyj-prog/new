@@ -246,9 +246,20 @@ public class miniFunctions {
 
         @Override
         public void caretUpdate(CaretEvent e) {
-            if(Objects.equals(notepad.mainFrame.getTitle(), "untitled - Notepad--")){
+            if(notepad.input.getSelectedText()==null){
+                notepad.copy.setEnabled(false);
+                notepad.copyR.setEnabled(false);
+
+            }else {
+                notepad.copy.setEnabled(true);
+                notepad.copyR.setEnabled(true);
+            }
+
+            if(Objects.equals(notepad.mainFrame.getTitle(), "untitled - Notepad--") || Objects.equals(notepad.mainFrame.getTitle(), "*untitled - Notepad--")){
                 if(!notepad.input.getText().isEmpty()){
                     notepad.mainFrame.setTitle("*untitled - Notepad--");
+                }else {
+                    notepad.mainFrame.setTitle("untitled - Notepad--");
                 }
             }
         }

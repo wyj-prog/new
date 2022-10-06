@@ -180,20 +180,7 @@ public class notepad extends JFrame{
         input = new JTextPane();
 
         input.addCaretListener(new miniFunctions.emptyCheck());
-        input.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    rClick.show(notepad.mainFrame, e.getX() + 10, e.getY() + 55);
-                    if (miniFunctions.getClipboardString() == null){
-                        pasteR.setEnabled(false);
-                    }
-                    if (input.getText().equals("")){
-                        selectAllR.setEnabled(false);
-                    }
-                }
-            }
-        });
+
 
         manage.addMouseListener(new MouseAdapter() {
             @Override
@@ -217,6 +204,8 @@ public class notepad extends JFrame{
         sysWheel = scroller.getMouseWheelListeners()[0];
         scroller.removeMouseWheelListener(sysWheel);
         scroller.addMouseWheelListener(new miniFunctions.scale());
+
+
 
 
 
@@ -295,6 +284,28 @@ public class notepad extends JFrame{
         rClick.add(copyR);
         rClick.add(pasteR);
         rClick.add(cutR);
+
+        input.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+
+
+                if (e.getButton() == MouseEvent.BUTTON3) {
+
+                    rClick.show(e.getComponent(), e.getX(), e.getY());
+
+                    if (miniFunctions.getClipboardString() == null){
+                        pasteR.setEnabled(false);
+                    }
+                    if (input.getText().equals("")){
+                        selectAllR.setEnabled(false);
+                    }
+                }
+
+
+            }
+        });
 
 
         //screen parameter
