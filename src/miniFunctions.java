@@ -166,8 +166,11 @@ public class miniFunctions {
                     notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
                     if (f.getName().endsWith(".odt")){
                         readODTContents(f.getPath());
-                        System.out.println(f.getPath());
-                    }else read(f);
+                    }else if (f.getName().endsWith(".rtf")){
+                        ReadRtf(f.getPath());
+
+                    }else
+                        read(f);
 
                 }
             }catch (Exception e){
@@ -450,22 +453,22 @@ public class miniFunctions {
         }
     }
 
-    public static String getTextFromRtf(String filePath) {
+    public static void ReadRtf(String filePath) {
         String result = null;
         File file = new File(filePath);
         try {
             DefaultStyledDocument styledDoc = new DefaultStyledDocument();
-            // 创建文件输入流
+            // Creating a file input stream
             InputStream streamReader = new FileInputStream(file);
             new RTFEditorKit().read(streamReader, styledDoc, 0);
-            //以 ISO-8859-1的编码形式获取字节byte[], 并以 GBK 的编码形式生成字符串
+            //Get byte[] in ISO-8859-1 encoding, and generate string in GBK encoding
             result = new String(styledDoc.getText(0, styledDoc.getLength()).getBytes("ISO8859-1"),"GBK");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
-        return result;
+        notepad.input.setText(result);
     }
 }
 
