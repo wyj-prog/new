@@ -135,8 +135,7 @@ public class miniFunctions {
 
             if (trans.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 try {
-                    String text = (String) trans.getTransferData(DataFlavor.stringFlavor);
-                    return text;
+                    return (String) trans.getTransferData(DataFlavor.stringFlavor);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -147,90 +146,18 @@ public class miniFunctions {
     }
 
 
-    private static JFileChooser fileChooser;
     static class OpenButton extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e1) {
 
             try {
-                fileChooser = new JFileChooser();
+                JFileChooser fileChooser = new JFileChooser();
                 int i = fileChooser.showOpenDialog(notepad.open); // Show the open file dialog
                 if (i == JFileChooser.APPROVE_OPTION) { // Click on the dialog box to open the option
                     File f = fileChooser.getSelectedFile(); // get selected file
                     notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
-                    try {
+                    read(f);
 
-                        notepad.input.setText("");
-                        String contentL;
-                        StringBuilder content = new StringBuilder();
-
-                        InputStreamReader streamReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
-                        BufferedReader bufferedReader = new BufferedReader(streamReader);
-
-                        while ((contentL = bufferedReader.readLine()) != null)
-                            content.append(contentL).append("\n");
-
-
-
-                        String fileName = f.getName();
-                        if (f.getName().toLowerCase().endsWith(".java")) {
-
-
-                            String[] strs = content.toString().split("\n");
-
-                            for (String s : strs) {
-                                String[] keys = s.split(" ");
-                                for (String s1 : keys) {
-                                    if (s1.contains("(")) {
-                                        String[] keys1 = s1.split("\\(");
-                                        for (int m = 0; m < keys1.length; m++) {
-                                            Color color = SCread.isJavaKey(keys1[m]);
-
-                                            setDocs(keys1[m], color, 18);
-                                            if (m < keys1.length - 1) setDocs("(", color, 18);
-                                        }
-                                    } else {
-                                        Color color = SCread.isJavaKey(s1);
-                                        setDocs(s1, color, 18);
-                                    }
-                                    setDocs(" ", Color.PINK, 18);
-                                }
-                                setDocs("\n", Color.RED, 18);
-                            }
-                        } else if (fileName.toLowerCase().endsWith(".py")) {
-                            String[] strs = content.toString().split("\n");
-                            int count = 0;
-                            for (String s : strs) {
-                                String[] keys = s.split(" ");
-                                for (String s1 : keys) {
-                                    Color color = SCread.isPyKey(s1);
-                                    setDocs(s1, color, 18);
-                                    setDocs(" ", Color.BLACK, 18);
-                                }
-                                ++count;
-                                if (count != strs.length) setDocs("\n", Color.BLACK, 18);
-                            }
-                        } else if (fileName.toLowerCase().endsWith(".cpp")) {
-                            String[] strs = content.toString().split("\n");
-                            int count = 0;
-                            for (String s : strs) {
-                                String[] keys = s.split(" ");
-                                for (String s1 : keys) {
-                                    Color color = SCread.isCppKey(s1);
-                                    setDocs(s1, color, 18);
-                                    setDocs(" ", Color.BLACK, 18);
-                                }
-                                ++count;
-                                if (count != strs.length) setDocs("\n", Color.BLACK, 18);
-                            }
-                        } else {
-                            setDocs(content.toString(), Color.BLACK, 18);
-                        }
-
-
-                } catch (Exception ex) {
-                        ex.printStackTrace(); // output error message
-                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -285,7 +212,78 @@ public class miniFunctions {
         }
     }
 
-    public static void setDocs(String str, Color col, int fontSize) {
+    public static void read(File f){
+        try {
+            notepad.input.setText("");
+            String contentL;
+            StringBuilder content = new StringBuilder();
+
+            InputStreamReader streamReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+
+            while ((contentL = bufferedReader.readLine()) != null)
+                content.append(contentL).append("\n");
+
+            String fileName = f.getName();
+            if (f.getName().toLowerCase().endsWith(".java")) {
+
+
+                String[] strs = content.toString().split("\n");
+
+                for (String s : strs) {
+                    String[] keys = s.split(" ");
+                    for (String s1 : keys) {
+                        if (s1.contains("(")) {
+                            String[] keys1 = s1.split("\\(");
+                            for (int m = 0; m < keys1.length; m++) {
+                                Color color = SCread.isJavaKey(keys1[m]);
+
+                                setDocs(keys1[m], color);
+                                if (m < keys1.length - 1) setDocs("(", color);
+                            }
+                        } else {
+                            Color color = SCread.isJavaKey(s1);
+                            setDocs(s1, color);
+                        }
+                        setDocs(" ", Color.PINK);
+                    }
+                    setDocs("\n", Color.RED);
+                }
+            } else if (fileName.toLowerCase().endsWith(".py")) {
+                String[] strs = content.toString().split("\n");
+                int count = 0;
+                for (String s : strs) {
+                    String[] keys = s.split(" ");
+                    for (String s1 : keys) {
+                        Color color = SCread.isPyKey(s1);
+                        setDocs(s1, color);
+                        setDocs(" ", Color.BLACK);
+                    }
+                    ++count;
+                    if (count != strs.length) setDocs("\n", Color.BLACK);
+                }
+            } else if (fileName.toLowerCase().endsWith(".cpp")) {
+                String[] strs = content.toString().split("\n");
+                int count = 0;
+                for (String s : strs) {
+                    String[] keys = s.split(" ");
+                    for (String s1 : keys) {
+                        Color color = SCread.isCppKey(s1);
+                        setDocs(s1, color);
+                        setDocs(" ", Color.BLACK);
+                    }
+                    ++count;
+                    if (count != strs.length) setDocs("\n", Color.BLACK);
+                }
+            } else {
+                setDocs(content.toString(), Color.BLACK);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace(); // output error message
+        }
+    }
+
+    public static void setDocs(String str, Color col) {
 
         SimpleAttributeSet attrSet = new SimpleAttributeSet();
         StyleConstants.setForeground(attrSet, col);

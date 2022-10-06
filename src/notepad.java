@@ -1,14 +1,10 @@
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelListener;
-import java.io.IOException;
+
 
 
 public class notepad extends JFrame{
@@ -231,7 +227,8 @@ public class notepad extends JFrame{
 
 
         //left part of status bar
-        leftPart = new JTextField("Line: 1          Column: 1           Word Count: 0");
+//        leftPart = new JTextField("Line: 1          Column: 1           Word Count: 0");
+        leftPart = new JTextField("Word Count: 0");
         leftPart.setLayout(null);
         leftPart.setEditable(false);
         leftPart.setBackground(new Color(238,238,238));
@@ -250,14 +247,14 @@ public class notepad extends JFrame{
 //                int row = input.getLineOfOffset(offset);
 //                int column = e.getDot() - input.getLineStartOffset(row);
 
-                Rectangle caretRectangle = input.getUI().modelToView(input,input.getCaretPosition());
+//                System.out.println(input.getCaretPosition());
 
 
-                int row= ((int)caretRectangle.getX()-3)/3;
-                int column= ((int)caretRectangle.getY()-3)/16;
+//                int row= ((int)caretRectangle.getX()-3)/3;
+//                int column= ((int)caretRectangle.getY()-3)/16;
 
 
-                leftPart.setText("Line: " + (row + 1) + "           Column: " + (column+1) + "          Word Count: " + count);
+                leftPart.setText("Word Count: " + count);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
