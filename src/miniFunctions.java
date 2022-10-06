@@ -349,6 +349,12 @@ public class miniFunctions {
                             addWord(word, color);
                         }
                     }
+                }
+                addWord(" ", Color.BLACK);
+            }
+            addWord("\n", Color.BLACK);
+        }
+    }
 
 
 // -The unfinished swan
@@ -381,7 +387,6 @@ public class miniFunctions {
     public static String str = "";
     public static void readODTContents(String srcFile) throws Exception {
         ZipFile zipFile = new ZipFile(srcFile);
-        System.out.println(srcFile);
         Enumeration entries = zipFile.entries();
         ZipEntry entry;
         org.w3c.dom.Document doc = null;
@@ -418,7 +423,6 @@ public class miniFunctions {
                 getText(node.getChildNodes().item(a));
             }
         } else {
-            System.out.println(node.getNodeName());
             if (node.getNodeName().equals("text:p")) {
                 if (count == 0){
                     count ++;
@@ -431,13 +435,6 @@ public class miniFunctions {
             if (node.getFirstChild() != null) {
                 str = str + node.getFirstChild().getNodeValue() + '\n';
             }
-            System.out.println(str);
-        }
-    }
-                }
-                addWord(" ", Color.BLACK);
-            }
-            addWord("\n", Color.BLACK);
         }
     }
 }
