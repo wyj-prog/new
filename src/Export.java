@@ -36,13 +36,13 @@ public class Export extends JFrame {
                 float startY = mediabox.getUpperRightY() - margin;
 
                 String text = notepad.input.getText();
-                List<String> lines = new ArrayList<String>();
+                List<String> liness = new ArrayList<String>();
                 String temp = "";
                 for (int i = 0; i < text.length(); i++){
                     if (text.charAt(i) == '\n' || text.charAt(i) == '\r'){
                         // If this is the end of the document
                         if(i + 1 == text.length()){ // last one
-                            lines.add(temp);
+                            liness.add(temp);
                             break;
                         }else
                         // If this is not the end of the document
@@ -54,10 +54,10 @@ public class Export extends JFrame {
                                     count ++;
                                 }else break;
                             }
-                            lines.add(temp);
-                            for (int newline = 1; newline <= (int)count; newline++){
+                            liness.add(temp);
+                            for (int newlines = 1; newlines <= (int)count; newlines++){
                                 temp = "";
-                                lines.add(temp);
+                                liness.add(temp);
                             }
                             if (i + 1 == text.length()) break;
                             else {
@@ -72,45 +72,45 @@ public class Export extends JFrame {
                 contentStream.beginText();
                 contentStream.setFont(pdfFont, fontSize);
                 contentStream.newLineAtOffset(startX, startY);
-                int count_lines = 0;
+                int count_liness = 0;
                 int need_new_page = 0;
-                int current_line = 0;
-                for (int i = 1; i <= lines.size() / 47 + 1 ; i ++){
-                    while (current_line < lines.size())
+                int current_lines = 0;
+                for (int i = 1; i <= liness.size() / 47 + 1 ; i ++){
+                    while (current_lines < liness.size())
                     {
-                        //Judging whether the line is too long
-                        if (lines.get(current_line).length() > 130){
+                        //Judging whether the lines is too long
+                        if (liness.get(current_lines).length() > 130){
                             int plus_one;
-                            plus_one = lines.get(current_line).length() % 130 == 0 ? 0 : 1;
-                            int rows = lines.get(current_line).length() / 130 + plus_one;
+                            plus_one = liness.get(current_lines).length() % 130 == 0 ? 0 : 1;
+                            int rows = liness.get(current_lines).length() / 130 + plus_one;
                             int current_position = 0;
                             for (int count = 1; count < rows; count++){
-                                contentStream.showText(lines.get(current_line).substring(current_position, current_position + 130));
+                                contentStream.showText(liness.get(current_lines).substring(current_position, current_position + 130));
                                 contentStream.newLine();
                                 contentStream.newLineAtOffset(0, -leading);
                                 current_position += 131;
                             }
-                            contentStream.showText(lines.get(current_line).substring(current_position, lines.get(current_line).length()));
+                            contentStream.showText(liness.get(current_lines).substring(current_position, liness.get(current_lines).length()));
                             contentStream.newLine();
                             contentStream.newLineAtOffset(0, -leading);
                         }else {
-                            contentStream.showText(lines.get(current_line));
+                            contentStream.showText(liness.get(current_lines));
                             contentStream.newLine();
                             contentStream.newLineAtOffset(0, -leading);
                         }
-                        current_line++;
-                        if ((current_line % 47) == 0) break;
+                        current_lines++;
+                        if ((current_lines % 47) == 0) break;
                     }
                     contentStream.endText();
                     contentStream.close();
-                    if (current_line != lines.size()) {
+                    if (current_lines != liness.size()) {
                         PDPage newpage = new PDPage();
                         doc.addPage(newpage);
                         contentStream = new PDPageContentStream(doc, newpage);
                         contentStream.beginText();
                         contentStream.setFont(pdfFont, fontSize);
                         contentStream.newLineAtOffset(startX, startY);
-                        count_lines = 0;
+                        count_liness = 0;
                     }
                 }
                 doc.save(new File("Print.pdf"));
