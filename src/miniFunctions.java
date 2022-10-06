@@ -212,85 +212,35 @@ public class miniFunctions {
         }
     }
 
-    public static void read(File f){
+    public static void read(File file){
         try {
             notepad.input.setText("");
             String contentL;
             StringBuilder content = new StringBuilder();
 
-            InputStreamReader streamReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
+            InputStreamReader streamReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(streamReader);
 
             while ((contentL = bufferedReader.readLine()) != null)
                 content.append(contentL).append("\n");
 
-            String fileName = f.getName();
-            if (f.getName().toLowerCase().endsWith(".java")) {
+            String fileName = file.getName();
 
 
-                String[] strs = content.toString().split("\n");
-
-                for (String s : strs) {
-                    String[] keys = s.split(" ");
-                    for (String s1 : keys) {
-                        if (s1.contains("(")) {
-                            String[] keys1 = s1.split("\\(");
-                            for (int m = 0; m < keys1.length; m++) {
-                                Color color = SCread.isJavaKey(keys1[m]);
-
-                                setDocs(keys1[m], color);
-                                if (m < keys1.length - 1) setDocs("(", color);
-                            }
-                        } else {
-                            Color color = SCread.isJavaKey(s1);
-                            setDocs(s1, color);
-                        }
-                        setDocs(" ", Color.PINK);
-                    }
-                    setDocs("\n", Color.RED);
-                }
-            } else if (fileName.toLowerCase().endsWith(".py")) {
-                String[] strs = content.toString().split("\n");
-                int count = 0;
-                for (String s : strs) {
-                    String[] keys = s.split(" ");
-                    for (String s1 : keys) {
-                        Color color = SCread.isPyKey(s1);
-                        setDocs(s1, color);
-                        setDocs(" ", Color.BLACK);
-                    }
-                    ++count;
-                    if (count != strs.length) setDocs("\n", Color.BLACK);
-                }
-            } else if (fileName.toLowerCase().endsWith(".cpp")) {
-                String[] strs = content.toString().split("\n");
-                int count = 0;
-                for (String s : strs) {
-                    String[] keys = s.split(" ");
-                    for (String s1 : keys) {
-                        Color color = SCread.isCppKey(s1);
-                        setDocs(s1, color);
-                        setDocs(" ", Color.BLACK);
-                    }
-                    ++count;
-                    if (count != strs.length) setDocs("\n", Color.BLACK);
-                }
+            if (file.getName().endsWith(".java")||fileName.toLowerCase().endsWith(".py")||fileName.toLowerCase().endsWith(".cpp")) {
+                sourceCodeEnhance(content);
             } else {
-                setDocs(content.toString(), Color.BLACK);
+                addWord(content.toString(), Color.BLACK);
             }
         } catch (Exception ex) {
             ex.printStackTrace(); // output error message
         }
     }
 
-    public static void setDocs(String str, Color col) {
-
+    public static void addWord(String str, Color col) {
         SimpleAttributeSet attrSet = new SimpleAttributeSet();
         StyleConstants.setForeground(attrSet, col);
-        insert(str, attrSet);
-    }
 
-    public static void insert(String str, AttributeSet attrSet) {
         Document doc = notepad.input.getDocument();
         try {
             doc.insertString(doc.getLength(), str, attrSet);
@@ -299,5 +249,99 @@ public class miniFunctions {
         }
     }
 
+    public static void sourceCodeEnhance (StringBuilder content){
 
+        String[] lines = content.toString().split("\n");
+
+        for (String line : lines) {
+            String[] words = line.split(" ");
+            for (String word : words) {
+
+                if (word.contains("(")) {
+                    Color color;
+                    String[] specWord = word.split("\\(");
+                    for (int m = 0; m < specWord.length; m++) {
+                        if(specWord[m].endsWith(",")){
+                            specWord[m] = specWord[m].replace(",","");
+                            if(specWord[m].startsWith("\"") && specWord[m].endsWith("\"")){
+                                color = Color.green;
+                                addWord(specWord[m], color);
+                            }else {
+                                color = SCread.keyword(specWord[m]);
+                                addWord(specWord[m], color);
+                            }
+                            addWord("," , Color.BLACK);
+                        }else {
+                            if(specWord[m].startsWith("\"") && specWord[m].endsWith("\"")){
+                                color = Color.green;
+                                addWord(specWord[m], color);
+                            }else {
+                                color = SCread.keyword(specWord[m]);
+                                addWord(specWord[m], color);
+                            }
+                        }
+
+                        if(m < specWord.length-1){
+                            addWord("(", Color.BLACK);
+                        }
+                    }
+
+                } else {
+
+                    if(word.endsWith(",")){
+                        word = word.replace(",","");
+                        if(word.startsWith("\"") && word.endsWith("\"")){
+                            Color color = Color.green;
+                            addWord(word, color);
+                        }else {
+                            Color color = SCread.keyword(word);
+                            addWord(word, color);
+                        }
+                        addWord("," , Color.BLACK);
+                    }else{
+                        if(word.startsWith("\"") && word.endsWith("\"")){
+                            Color color = Color.green;
+                            addWord(word, color);
+                        }else {
+                            Color color = SCread.keyword(word);
+                            addWord(word, color);
+                        }
+                    }
+
+
+// -The unfinished swan
+//
+//                String[] wordAs = word.split("\\(");
+//                for (String wordA : wordAs){
+//                    String[] wordBs = wordA.split("\\)");
+//                    for (String wordB : wordBs){
+//                        String[] wordCs = wordB.split("\\{");
+//                        for (String wordC : wordCs){
+//                            String[] wordDs = wordC.split("}");
+//                            for (String wordD : wordDs){
+//                                String[] wordEs = wordD.split(",");
+//                                for (String wordE : wordEs){
+//
+//                                    Color color = SCread.keyword(wordE);
+//                                    addWord(word, color);
+//
+//                                    addWord(",", Color.BLACK);
+//                                }
+//                                addWord("}", Color.BLACK);
+//                            }
+//                            addWord("{", Color.BLACK);
+//                        }
+//                        addWord("\\)", Color.BLACK);
+//                    }
+//                    addWord("\\(", Color.BLACK);
+//                }
+
+                }
+                addWord(" ", Color.BLACK);
+            }
+            addWord("\n", Color.BLACK);
+        }
+    }
 }
+
+
