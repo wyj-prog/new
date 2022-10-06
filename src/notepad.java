@@ -89,6 +89,7 @@ public class notepad extends JFrame{
         open = new JMenuItem("Open");
         open.addActionListener(new miniFunctions.OpenButton());
         save = new JMenuItem("Save");
+        save.addActionListener(new miniFunctions.SaveButton());
         exit = new JMenuItem("Exit");
 
         file.add(New);
