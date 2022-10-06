@@ -200,6 +200,41 @@ public class miniFunctions {
         }
     }
 
+    static class SaveButton extends JFrame implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e){
+            // Open the save dialog
+            JFileChooser choose = new JFileChooser();
+            // Choose the file
+            int result = choose.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION){
+                // Get the selected files
+                File file = choose.getSelectedFile();
+                FileWriter fw = null;
+                // Save
+                try {
+                    fw = new FileWriter(file);
+                    fw.write(notepad.input.getText());
+                    String currentFileName = file.getName();
+                    String currentPath = file.getAbsolutePath();
+//                    // If it is not enough, these codes are needed
+//                    fw.flush();
+//                    this.flag = 3;
+//                    this.setTitle(currentPath);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }finally {
+                    try {
+                        if (fw != null) fw.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+
+        }
+    }
+
     static class emptyCheck extends JFrame implements CaretListener {
 
         @Override
