@@ -1,18 +1,17 @@
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStream;
+import java.awt.event.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class miniFunctions {
     //Dynamic time display
@@ -53,9 +52,9 @@ public class miniFunctions {
                     notepad.input.setFont(new Font(f.getFamily(),f.getStyle(),f.getSize()-1));
                 }
             }else{
-//                notepad.scroller.addMouseWheelListener(notepad.sysWheel);
-//                notepad.sysWheel.mouseWheelMoved(e);
-//                notepad.scroller.removeMouseWheelListener(notepad.sysWheel);
+                notepad.scroller.addMouseWheelListener(notepad.sysWheel);
+                notepad.sysWheel.mouseWheelMoved(e);
+                notepad.scroller.removeMouseWheelListener(notepad.sysWheel);
             }
         }
     }
@@ -118,27 +117,24 @@ public class miniFunctions {
     public static int getScreenWidth(){
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        return screenWidth;
+        return screenSize.width;
     }
 
     public static int getScreenHeight(){
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        return screenHeight;
+        return screenSize.height;
     }
 
     public static String getClipboardString() {
-        // 获取系统剪贴板
+
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        // 获取剪贴板中的内容
+
         Transferable trans = clipboard.getContents(null);
         if (trans != null) {
-            // 判断剪贴板中的内容是否支持文本
+
             if (trans.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 try {
-                    // 获取剪贴板中的文本内容
                     String text = (String) trans.getTransferData(DataFlavor.stringFlavor);
                     return text;
                 } catch (Exception e) {
@@ -152,7 +148,7 @@ public class miniFunctions {
 
 
     private static JFileChooser fileChooser;
-    static class OpenButton implements ActionListener {
+    static class OpenButton extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e1) {
 
@@ -161,10 +157,78 @@ public class miniFunctions {
                 int i = fileChooser.showOpenDialog(notepad.open); // Show the open file dialog
                 if (i == JFileChooser.APPROVE_OPTION) { // Click on the dialog box to open the option
                     File f = fileChooser.getSelectedFile(); // get selected file
+                    notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
                     try {
-                        FileReader is = new FileReader(f); // get file input stream
-                        notepad.input.read(is, f); // read file into text pane
-                    } catch (Exception ex) {
+
+                        notepad.input.setText("");
+                        String contentL;
+                        StringBuilder content = new StringBuilder();
+
+                        InputStreamReader streamReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
+                        BufferedReader bufferedReader = new BufferedReader(streamReader);
+
+                        while ((contentL = bufferedReader.readLine()) != null)
+                            content.append(contentL).append("\n");
+
+
+
+                        String fileName = f.getName();
+                        if (f.getName().toLowerCase().endsWith(".java")) {
+
+
+                            String[] strs = content.toString().split("\n");
+
+                            for (String s : strs) {
+                                String[] keys = s.split(" ");
+                                for (String s1 : keys) {
+                                    if (s1.contains("(")) {
+                                        String[] keys1 = s1.split("\\(");
+                                        for (int m = 0; m < keys1.length; m++) {
+                                            Color color = SCread.isJavaKey(keys1[m]);
+
+                                            setDocs(keys1[m], color, 18);
+                                            if (m < keys1.length - 1) setDocs("(", color, 18);
+                                        }
+                                    } else {
+                                        Color color = SCread.isJavaKey(s1);
+                                        setDocs(s1, color, 18);
+                                    }
+                                    setDocs(" ", Color.PINK, 18);
+                                }
+                                setDocs("\n", Color.RED, 18);
+                            }
+                        } else if (fileName.toLowerCase().endsWith(".py")) {
+                            String[] strs = content.toString().split("\n");
+                            int count = 0;
+                            for (String s : strs) {
+                                String[] keys = s.split(" ");
+                                for (String s1 : keys) {
+                                    Color color = SCread.isPyKey(s1);
+                                    setDocs(s1, color, 18);
+                                    setDocs(" ", Color.BLACK, 18);
+                                }
+                                ++count;
+                                if (count != strs.length) setDocs("\n", Color.BLACK, 18);
+                            }
+                        } else if (fileName.toLowerCase().endsWith(".cpp")) {
+                            String[] strs = content.toString().split("\n");
+                            int count = 0;
+                            for (String s : strs) {
+                                String[] keys = s.split(" ");
+                                for (String s1 : keys) {
+                                    Color color = SCread.isCppKey(s1);
+                                    setDocs(s1, color, 18);
+                                    setDocs(" ", Color.BLACK, 18);
+                                }
+                                ++count;
+                                if (count != strs.length) setDocs("\n", Color.BLACK, 18);
+                            }
+                        } else {
+                            setDocs(content.toString(), Color.BLACK, 18);
+                        }
+
+
+                } catch (Exception ex) {
                         ex.printStackTrace(); // output error message
                     }
                 }
@@ -184,10 +248,13 @@ public class miniFunctions {
                         case 0:
                             // Yes option
                             JOptionPane.showMessageDialog(null, "Saved");
+                            notepad.input.setText("");
+                            notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;
                         case 1:
                             // No option
                             notepad.input.setText("");
+                            notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;
                         case -1:
                             // Close option
@@ -196,10 +263,43 @@ public class miniFunctions {
                             // Cancel option
                             break;
                     }
+                } else {
+                    notepad.input.setText("");
+                    notepad.mainFrame.setTitle("untitled - Notepad--");
                 }
             }catch (Exception e2){
                 e2.printStackTrace();
             }
         }
     }
+
+    static class emptyCheck extends JFrame implements CaretListener {
+
+        @Override
+        public void caretUpdate(CaretEvent e) {
+            if(Objects.equals(notepad.mainFrame.getTitle(), "untitled - Notepad--")){
+                if(!notepad.input.getText().isEmpty()){
+                    notepad.mainFrame.setTitle("*untitled - Notepad--");
+                }
+            }
+        }
+    }
+
+    public static void setDocs(String str, Color col, int fontSize) {
+
+        SimpleAttributeSet attrSet = new SimpleAttributeSet();
+        StyleConstants.setForeground(attrSet, col);
+        insert(str, attrSet);
+    }
+
+    public static void insert(String str, AttributeSet attrSet) {
+        Document doc = notepad.input.getDocument();
+        try {
+            doc.insertString(doc.getLength(), str, attrSet);
+        } catch (BadLocationException e) {
+            System.out.println("BadLocationException: " + e);
+        }
+    }
+
+
 }

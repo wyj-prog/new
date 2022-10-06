@@ -17,8 +17,11 @@ public class notepad extends JFrame{
         notepad notepad = new notepad();
         notepad.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
+    
+    public static JFrame mainFrame;
+    
     //Input Area
-    public static JTextArea input;
+    public static JTextPane input;
     public static JScrollPane scroller;
     public static MouseWheelListener sysWheel;
 
@@ -74,9 +77,8 @@ public class notepad extends JFrame{
 
     public notepad() {
 
-        super("Notepad--");
-
-        this.setSize(600,600);
+        mainFrame = new JFrame("Notepad--");
+        mainFrame.setSize(600,600);
 
 
         //Top menubar
@@ -174,17 +176,18 @@ public class notepad extends JFrame{
 
         //topMenu construct
 
-        this.add(topMenu, BorderLayout.NORTH);
+        mainFrame.add(topMenu, BorderLayout.NORTH);
 
 
         //Input area
-        input = new JTextArea();
+        input = new JTextPane();
 
+        input.addCaretListener(new miniFunctions.emptyCheck());
         input.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
-                    rClick.show(notepad.this, e.getX() + 10, e.getY() + 55);
+                    rClick.show(notepad.mainFrame, e.getX() + 10, e.getY() + 55);
                     if (miniFunctions.getClipboardString() == null){
                         pasteR.setEnabled(false);
                     }
@@ -214,14 +217,14 @@ public class notepad extends JFrame{
         scroller.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scroller.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroller.setViewportView(input);
-        sysWheel = scroller.getMouseWheelListeners()[0];//得到系统滚动事件
-        scroller.removeMouseWheelListener(sysWheel);//移除系统滚动，需要时添加
+        sysWheel = scroller.getMouseWheelListeners()[0];
+        scroller.removeMouseWheelListener(sysWheel);
         scroller.addMouseWheelListener(new miniFunctions.scale());
 
 
 
 
-        this.add(scroller);
+        mainFrame.add(scroller);
 
         //Status Bar
         statusBar = new JPanel();
@@ -230,7 +233,6 @@ public class notepad extends JFrame{
         //left part of status bar
         leftPart = new JTextField("Line: 1          Column: 1           Word Count: 0");
         leftPart.setLayout(null);
-        leftPart.setPreferredSize(new Dimension(250,25));
         leftPart.setEditable(false);
         leftPart.setBackground(new Color(238,238,238));
         leftPart.setBorder(new MatteBorder(0, 0, 0, 0, new Color(238, 238,
@@ -244,10 +246,17 @@ public class notepad extends JFrame{
                 String trimmedLine = text.trim();
                 int count = trimmedLine.isEmpty() ? 0 : trimmedLine.split("\\s+").length;
 
+//                int offset = e.getDot() ;
+//                int row = input.getLineOfOffset(offset);
+//                int column = e.getDot() - input.getLineStartOffset(row);
 
-                int offset = e.getDot() ;
-                int row = input.getLineOfOffset(offset);
-                int column = e.getDot() - input.getLineStartOffset(row);
+                Rectangle caretRectangle = input.getUI().modelToView(input,input.getCaretPosition());
+
+
+                int row= ((int)caretRectangle.getX()-3)/3;
+                int column= ((int)caretRectangle.getY()-3)/16;
+
+
                 leftPart.setText("Line: " + (row + 1) + "           Column: " + (column+1) + "          Word Count: " + count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -269,7 +278,7 @@ public class notepad extends JFrame{
         topMenu.add(Box.createHorizontalGlue());
         topMenu.add(timeAndDate);
 
-        this.add(statusBar, BorderLayout.SOUTH);
+        mainFrame.add(statusBar, BorderLayout.SOUTH);
 
         //pop menu
         rClick = new JPopupMenu();
@@ -291,10 +300,10 @@ public class notepad extends JFrame{
 
 
         //screen parameter
-        int height = this.getHeight();
-        int width = this.getWidth();
-        this.setLocation(miniFunctions.getScreenWidth()/2-width/2, miniFunctions.getScreenHeight()/2-height/2);
-        this.setVisible(true);
+        int height = mainFrame.getHeight();
+        int width = mainFrame.getWidth();
+        mainFrame.setLocation(miniFunctions.getScreenWidth()/2-width/2, miniFunctions.getScreenHeight()/2-height/2);
+        mainFrame.setVisible(true);
 
 
     }
