@@ -1,7 +1,12 @@
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -11,7 +16,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Objects;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class miniFunctions {
     //Dynamic time display
@@ -149,14 +157,16 @@ public class miniFunctions {
     static class OpenButton extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e1) {
-
             try {
                 JFileChooser fileChooser = new JFileChooser();
                 int i = fileChooser.showOpenDialog(notepad.open); // Show the open file dialog
                 if (i == JFileChooser.APPROVE_OPTION) { // Click on the dialog box to open the option
                     File f = fileChooser.getSelectedFile(); // get selected file
                     notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
-                    read(f);
+                    if (f.getName().endsWith(".odt")){
+                        readODTContents(f.getPath());
+                        System.out.println(f.getPath());
+                    }else read(f);
 
                 }
             }catch (Exception e){
@@ -175,6 +185,7 @@ public class miniFunctions {
                         case 0:
                             // Yes option
                             JOptionPane.showMessageDialog(null, "Saved");
+                            ;
                             notepad.input.setText("");
                             notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;
@@ -217,10 +228,6 @@ public class miniFunctions {
                     fw.write(notepad.input.getText());
                     String currentFileName = file.getName();
                     String currentPath = file.getAbsolutePath();
-//                    // If it is not enough, these codes are needed
-//                    fw.flush();
-//                    this.flag = 3;
-//                    this.setTitle(currentPath);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }finally {
@@ -260,7 +267,7 @@ public class miniFunctions {
                 content.append(contentL).append("\n");
 
             String fileName = f.getName();
-            if (f.getName().toLowerCase().endsWith(".java")) {
+            if (f.getName().toLowerCase().endsWith  (".java")) {
 
 
                 String[] strs = content.toString().split("\n");
@@ -335,4 +342,60 @@ public class miniFunctions {
     }
 
 
+    public static String str = "";
+    public static void readODTContents(String srcFile) throws Exception {
+        ZipFile zipFile = new ZipFile(srcFile);
+        System.out.println(srcFile);
+        Enumeration entries = zipFile.entries();
+        ZipEntry entry;
+        org.w3c.dom.Document doc = null;
+        while (entries.hasMoreElements()) {
+            entry = (ZipEntry) entries.nextElement();
+            // only handel XML file
+            if (entry.getName().equals("content.xml")) {
+                // generate the document
+                DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+                domFactory.setNamespaceAware(true);
+                DocumentBuilder docBuilder = domFactory.newDocumentBuilder();
+                doc = docBuilder.parse(zipFile.getInputStream(entry));
+
+                // generate the node
+                NodeList list = doc.getElementsByTagName("text:p");
+
+                for (int a = 0; a < list.getLength(); a++) {
+                    Node node = list.item(a);
+                    // Recursive fetching of label contents
+                    getText(node);
+                    // Empty the data and record the content of the next tab
+                }
+            }
+        }
+        notepad.input.setText(str);
+    }
+
+
+    private static int count = 0;
+    public static void getText(org.w3c.dom.Node node) {
+        if (node.getChildNodes().getLength() > 1) {
+            NodeList childNodes = node.getChildNodes();
+            for (int a = 0; a < childNodes.getLength(); a++) {
+                getText(node.getChildNodes().item(a));
+            }
+        } else {
+            System.out.println(node.getNodeName());
+            if (node.getNodeName().equals("text:p")) {
+                if (count == 0){
+                    count ++;
+                }else str += "\n";
+            }
+            if (node.getNodeValue() != null) {
+                // str is used to link the content of the tags
+                str = str + node.getNodeValue();
+            }
+            if (node.getFirstChild() != null) {
+                str = str + node.getFirstChild().getNodeValue() + '\n';
+            }
+            System.out.println(str);
+        }
+    }
 }
