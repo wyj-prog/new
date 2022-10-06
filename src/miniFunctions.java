@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.*;
+import javax.swing.text.rtf.RTFEditorKit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
@@ -447,6 +448,24 @@ public class miniFunctions {
                 str = str + node.getFirstChild().getNodeValue() + '\n';
             }
         }
+    }
+
+    public static String getTextFromRtf(String filePath) {
+        String result = null;
+        File file = new File(filePath);
+        try {
+            DefaultStyledDocument styledDoc = new DefaultStyledDocument();
+            // 创建文件输入流
+            InputStream streamReader = new FileInputStream(file);
+            new RTFEditorKit().read(streamReader, styledDoc, 0);
+            //以 ISO-8859-1的编码形式获取字节byte[], 并以 GBK 的编码形式生成字符串
+            result = new String(styledDoc.getText(0, styledDoc.getLength()).getBytes("ISO8859-1"),"GBK");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
 
