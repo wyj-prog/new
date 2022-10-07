@@ -15,6 +15,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
@@ -188,8 +189,9 @@ public class miniFunctions {
                     switch (choice){
                         case 0:
                             // Yes option
-                            JOptionPane.showMessageDialog(null, "Saved");
-
+                            JButton a = new JButton();
+                            a.addActionListener(new SaveButton());
+                            save_func();
                             notepad.input.setText("");
                             notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;
@@ -218,32 +220,36 @@ public class miniFunctions {
     static class SaveButton extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e){
-            // Open the save dialog
-            JFileChooser choose = new JFileChooser();
-            // Choose the file
-            int result = choose.showSaveDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION){
-                // Get the selected files
-                File file = choose.getSelectedFile();
-                FileWriter fw = null;
-                // Save
+            save_func();
+        }
+    }
+
+    public static void save_func(){
+        // Open the save dialog
+        JFileChooser choose = new JFileChooser();
+        // Choose the file
+        int result = choose.showSaveDialog(SaveButton.getFrames()[0]);
+        if (result == JFileChooser.APPROVE_OPTION){
+            // Get the selected files
+            File file = choose.getSelectedFile();
+            FileWriter fw = null;
+            // Save
+            try {
+                fw = new FileWriter(file);
+                fw.write(notepad.input.getText());
+                String currentFileName = file.getName();
+                String currentPath = file.getAbsolutePath();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }finally {
                 try {
-                    fw = new FileWriter(file);
-                    fw.write(notepad.input.getText());
-                    String currentFileName = file.getName();
-                    String currentPath = file.getAbsolutePath();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }finally {
-                    try {
-                        if (fw != null) fw.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+                    if (fw != null) fw.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
             }
-
         }
+
     }
 
     static class emptyCheck extends JFrame implements CaretListener {

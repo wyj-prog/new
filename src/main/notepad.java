@@ -313,6 +313,7 @@ public class notepad extends JFrame{
         int width = mainFrame.getWidth();
         mainFrame.setLocation(miniFunctions.getScreenWidth()/2-width/2, miniFunctions.getScreenHeight()/2-height/2);
         mainFrame.setVisible(true);
+        mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
     }
