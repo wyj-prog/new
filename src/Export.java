@@ -1,9 +1,7 @@
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,12 +10,21 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.yaml.snakeyaml.Yaml;
 
 import javax.swing.*;
 
 public class Export extends JFrame {
 
     public Export() throws IOException{
+        // Read from the YAML file
+        Yaml exportyaml = new Yaml();
+        FileReader yamlreader = new FileReader("YAML//export.yaml");
+        BufferedReader yamlbuffer = new BufferedReader(yamlreader);
+        Map<String, Object> map = exportyaml.load(yamlbuffer);
+        int margin = (int) map.get("margin");
+        int fontSize = (int) map.get("fontSize");
+
         PDDocument doc = null;
         try
         {
@@ -27,12 +34,13 @@ public class Export extends JFrame {
             PDPageContentStream contentStream = new PDPageContentStream(doc, page);
 
             PDFont pdfFont = PDType0Font.load(doc, new File("c:/windows/fonts/times.ttf"));
+            // If the above font does not cover the characters you typed, you can choose the one below.
             //PDFont pdfFont = PDType1Font.TIMES_ROMAN;
-            float fontSize = 9;
+            //float fontSize = 9;
             float leading = 1.5f * fontSize;
 
             PDRectangle mediabox = page.getMediaBox();
-            float margin = 72;
+            //float margin = 72;
             float width = mediabox.getWidth() - 2*margin;
             float startX = mediabox.getLowerLeftX() + margin;
             float startY = mediabox.getUpperRightY() - margin;
@@ -126,5 +134,14 @@ public class Export extends JFrame {
                 JOptionPane.showMessageDialog(null, "Error occured", "alert", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public static void callExport() throws IOException{
+        InputStream inputStream = new FileInputStream(new File("YAML//export.yaml"));
+        Yaml yaml = new Yaml();
+        Export newexport = yaml.load(inputStream);
+        System.out.println(newexport);
+    }
+
 }
+
 
