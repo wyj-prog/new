@@ -189,7 +189,7 @@ public class miniFunctions {
                         case 0:
                             // Yes option
                             JOptionPane.showMessageDialog(null, "Saved");
-                            ;
+
                             notepad.input.setText("");
                             notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;

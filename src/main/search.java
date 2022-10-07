@@ -1,11 +1,13 @@
+import org.testng.annotations.Test;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.xml.stream.events.StartDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -17,7 +19,7 @@ public class search extends JFrame {
             new search();
         }
     }
-    
+
     JFrame searchBox;
     JPanel upper;
     JPanel buttons;
@@ -57,12 +59,7 @@ public class search extends JFrame {
         searchButton = new JButton("Search");
         searchButton.addActionListener(new searching());
         exitButton = new JButton("Cancel");
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchBox.dispose();
-            }
-        });
+        exitButton.addActionListener(e -> searchBox.dispose());
 
 
         buttons = new JPanel();
@@ -198,7 +195,6 @@ public class search extends JFrame {
     static class searching implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-
             searchMethod();
         }
     }
@@ -242,12 +238,11 @@ public class search extends JFrame {
     }
 
 
-
-    public static void searchMethod(){
+    public static int searchMethod(){
 
 
         target = inputS.getText();
-        String text;
+        StringBuilder text;
         String targetS;
         if(Objects.equals(target, "")){
             JOptionPane.showMessageDialog(null, "No searching target.", "Error",
@@ -255,14 +250,22 @@ public class search extends JFrame {
         }
 
         if (caseSensitive.isSelected()) {
-            text = notepad.input.getText();
+            text = new StringBuilder(notepad.input.getText());
+            text = processText(text);
             targetS = target;
         } else {
-            text = notepad.input.getText().toUpperCase();
+            text = new StringBuilder(notepad.input.getText().toUpperCase());
+            text = processText(text);
             targetS = target.toUpperCase(Locale.ROOT);
         }
+
+
+
+
         int currentPosition = notepad.input.getCaretPosition();
         int nextPosition;
+
+
         if (up.isSelected()) {
             if (notepad.input.getSelectedText() == null) {
                 nextPosition = text.lastIndexOf(targetS, currentPosition - 1);
@@ -272,6 +275,8 @@ public class search extends JFrame {
             if (nextPosition != -1) {
                 notepad.input.setCaretPosition(nextPosition);
                 notepad.input.select(nextPosition, nextPosition + inputS.getText().length());
+
+
             } else {
                 if (circle.isSelected()) {
                     nextPosition = text.lastIndexOf(targetS);
@@ -289,15 +294,27 @@ public class search extends JFrame {
             }
 
         } else {
+
             nextPosition = text.indexOf(targetS, currentPosition);
+
+
             if (nextPosition != -1) {
+
+
                 notepad.input.setCaretPosition(nextPosition + inputS.getText().length());
+
+
+
                 notepad.input.select(nextPosition, nextPosition + inputS.getText().length());
             } else {
                 if (circle.isSelected()) {
                     nextPosition = text.indexOf(targetS);
                     if (nextPosition != -1) {
                         notepad.input.setCaretPosition(nextPosition + inputS.getText().length());
+
+
+
+
                         notepad.input.select(nextPosition, nextPosition + inputS.getText().length());
                     } else {
                         JOptionPane.showMessageDialog(null, "Cannot find “" + inputS.getText() + "“", "Error",
@@ -309,5 +326,55 @@ public class search extends JFrame {
                 }
             }
         }
+
+        return nextPosition;
     }
+
+    public static StringBuilder processText(StringBuilder str){
+        char current;
+        char pre = 0;
+        int cnt = 0;
+        ArrayList<Integer> rm = new ArrayList<>();
+
+
+
+        for (int i = 0; i < str.length(); i++) {
+
+            if(i != 0){
+                current = str.charAt(i);
+                pre = str.charAt(i - 1);
+            } else {
+                current = str.charAt(i);
+            }
+
+
+
+            if(current == '\n' && pre == '\r'){
+                str.setCharAt(i-1, '\n');
+                str.setCharAt(i, '1');
+                rm.add(i-cnt);
+                cnt++;
+
+            }
+        }
+
+
+
+
+        for (int a : rm){
+
+            String temp1 = str.toString();
+            String temp2 = str.toString();
+            String result;
+
+            result = temp1.substring(0, a) + temp2.substring(a + 1);
+            str = new StringBuilder(result);
+        }
+
+
+
+        return str;
+    }
+
+
 }

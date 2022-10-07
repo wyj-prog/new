@@ -34,7 +34,9 @@ public class about extends JFrame {
 
         mainText = new JLabel("<html><body>"+"Beneath this mask there is more than flesh."+"<br>"+
                 "Beneath this mask there is an idea, "+ "<br>" +
-                "Mr. Creedy, and ideas are bulletproof."+"<body></html>", JLabel.CENTER);
+                "Mr. Creedy, and ideas are bulletproof."+"<br><br>" +
+                "Zheng Wang" + "<br>" +
+                "William Wu"+"<body></html>", JLabel.CENTER);
 
 
         this.setTitle((String) map.get("Title"));
