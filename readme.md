@@ -20,7 +20,7 @@ Member II : William Wu, ID: 21012743
 
 2. You can open this project in any IDE. Run this maven project. When build succeeds, run the "notepad.class" and you will see the notepad program. Just like the one below.
 
-   <img src="C:\Users\wyj\AppData\Roaming\Typora\typora-user-images\image-20221008112323912.png" alt="image-20221008112323912" style="zoom:50%;" />
+   <img src="readme.assets\image-20221008112323912.png" alt="image-20221008112323912" style="zoom:50%;" />
 
    Files in the repository:
 
