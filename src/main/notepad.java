@@ -2,11 +2,9 @@
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.CaretListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelListener;
-
+import java.awt.event.*;
 
 
 public class notepad extends JFrame{
@@ -93,6 +91,9 @@ public class notepad extends JFrame{
         save = new JMenuItem("Save");
         save.addActionListener(new miniFunctions.SaveButton());
         exit = new JMenuItem("Exit");
+        exit.addActionListener(e -> {
+            mainFrame.dispose();
+        });
 
         file.add(New);
         file.add(open);
@@ -229,28 +230,7 @@ public class notepad extends JFrame{
 
 
         //cursor position
-        input.addCaretListener(e -> {
-            try {
-                String text = input.getText();
-                String trimmedLine = text.trim();
-                int count = trimmedLine.isEmpty() ? 0 : trimmedLine.split("\\s+").length;
-
-//                int offset = e.getDot() ;
-//                int row = input.getLineOfOffset(offset);
-//                int column = e.getDot() - input.getLineStartOffset(row);
-
-//                System.out.println(input.getCaretPosition());
-
-
-//                int row= ((int)caretRectangle.getX()-3)/3;
-//                int column= ((int)caretRectangle.getY()-3)/16;
-
-
-                leftPart.setText("Word Count: " + count);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        input.addCaretListener( new miniFunctions.wordCount());
 
 
         statusBar.setLayout(new FlowLayout());

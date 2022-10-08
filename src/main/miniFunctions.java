@@ -37,6 +37,23 @@ public class miniFunctions {
         }
     }
 
+    static class wordCount implements CaretListener {
+
+        @Override
+        public void caretUpdate(CaretEvent e) {
+            try {
+                String text = notepad.input.getText();
+                String trimmedLine = text.trim();
+                int count = trimmedLine.isEmpty() ? 0 : trimmedLine.split("\\s+").length;
+
+
+                notepad.leftPart.setText("Word Count: " + count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     //Status bar invisibility
     static class statusBarInvisibility implements ActionListener {
         @Override
