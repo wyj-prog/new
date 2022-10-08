@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 
 public class notepadTest {
+
     @Test
     public void testOpen() throws Exception {
         notepad testing_notepad = new notepad();
