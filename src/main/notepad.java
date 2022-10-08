@@ -194,6 +194,7 @@ public class notepad extends JFrame{
                     }
                     if (input.getText().equals("")){
                         selectAll.setEnabled(false);
+                        copy.setEnabled(false);
                     }
                 }
             }
