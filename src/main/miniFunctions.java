@@ -154,9 +154,7 @@ public class miniFunctions {
     }
 
     public static String getClipboardString() {
-
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
         Transferable trans = clipboard.getContents(null);
         if (trans != null) {
 
@@ -181,20 +179,27 @@ public class miniFunctions {
                 int i = fileChooser.showOpenDialog(notepad.open); // Show the open file dialog
                 if (i == JFileChooser.APPROVE_OPTION) { // Click on the dialog box to open the option
                     File f = fileChooser.getSelectedFile(); // get selected file
-                    notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
-                    if (f.getName().endsWith(".odt")){
-                        readODTContents(f.getPath());
-                    }else if (f.getName().endsWith(".rtf")){
-                        ReadRtf(f.getPath());
-
-                    }else
-                        read(f);
-
+                    Open_func(f);
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public static String Open_func(File f) throws Exception {
+        notepad.mainFrame.setTitle(f.getName() + " - Notepad--");
+        if (f.getName().endsWith(".odt")){
+            return readODTContents(f.getPath());
+        }else if (f.getName().endsWith(".rtf")){
+            return ReadRtf(f.getPath());
+        }else if (f.getName().endsWith(".txt") || f.getName().endsWith(".py") || f.getName().endsWith(".java") || f.getName().endsWith(".cpp")){
+            return read(f);
+        }else {
+            JOptionPane.showMessageDialog(null, "This file may not open correctly as its format is not supported.");
+            return read(f);
+        }
+
     }
 
     static class NewButton extends JFrame implements ActionListener {
@@ -208,7 +213,15 @@ public class miniFunctions {
                             // Yes option
                             JButton a = new JButton();
                             a.addActionListener(new SaveButton());
-                            save_func();
+                            // Open the save dialog
+                            JFileChooser choose = new JFileChooser();
+                            // Choose the file
+                            int result = choose.showSaveDialog(SaveButton.getFrames()[0]);
+                            if (result == JFileChooser.APPROVE_OPTION){
+                                // Get the selected files
+                                File file = choose.getSelectedFile();
+                                save_func(file);
+                            }
                             notepad.input.setText("");
                             notepad.mainFrame.setTitle("untitled - Notepad--");
                             break;
@@ -237,36 +250,35 @@ public class miniFunctions {
     static class SaveButton extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e){
-            save_func();
+            // Open the save dialog
+            JFileChooser choose = new JFileChooser();
+            // Choose the file
+            int result = choose.showSaveDialog(SaveButton.getFrames()[0]);
+            if (result == JFileChooser.APPROVE_OPTION){
+                // Get the selected files
+                File file = choose.getSelectedFile();
+                save_func(file);
+            }
         }
     }
 
-    public static void save_func(){
-        // Open the save dialog
-        JFileChooser choose = new JFileChooser();
-        // Choose the file
-        int result = choose.showSaveDialog(SaveButton.getFrames()[0]);
-        if (result == JFileChooser.APPROVE_OPTION){
-            // Get the selected files
-            File file = choose.getSelectedFile();
-            FileWriter fw = null;
-            // Save
+    public static void save_func(File file){
+        FileWriter fw = null;
+        // Save
+        try {
+            fw = new FileWriter(file);
+            fw.write(notepad.input.getText());
+            String currentFileName = file.getName();
+            String currentPath = file.getAbsolutePath();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }finally {
             try {
-                fw = new FileWriter(file);
-                fw.write(notepad.input.getText());
-                String currentFileName = file.getName();
-                String currentPath = file.getAbsolutePath();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }finally {
-                try {
-                    if (fw != null) fw.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                if (fw != null) fw.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }
-
     }
 
     static class emptyCheck extends JFrame implements CaretListener {
@@ -292,7 +304,8 @@ public class miniFunctions {
         }
     }
 
-    public static void read(File file){
+    public static String read(File file){
+        String all_contents = "";
         try {
             notepad.input.setText("");
             String contentL;
@@ -301,8 +314,12 @@ public class miniFunctions {
             InputStreamReader streamReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(streamReader);
 
-            while ((contentL = bufferedReader.readLine()) != null)
+            while ((contentL = bufferedReader.readLine()) != null) {
                 content.append(contentL).append("\n");
+                all_contents += contentL;
+            }
+
+
 
             String fileName = file.getName();
 
@@ -315,6 +332,7 @@ public class miniFunctions {
         } catch (Exception ex) {
             ex.printStackTrace(); // output error message
         }
+        return all_contents;
     }
 
     public static void addWord(String str, Color col) {
@@ -423,7 +441,7 @@ public class miniFunctions {
 //                }
 
     public static String str = "";
-    public static void readODTContents(String srcFile) throws Exception {
+    public static String readODTContents(String srcFile) throws Exception {
         ZipFile zipFile = new ZipFile(srcFile);
         Enumeration entries = zipFile.entries();
         ZipEntry entry;
@@ -450,11 +468,12 @@ public class miniFunctions {
             }
         }
         notepad.input.setText(str);
+        return str;
     }
 
 
     private static int count = 0;
-    public static void getText(org.w3c.dom.Node node) {
+    public static String getText(org.w3c.dom.Node node) {
         if (node.getChildNodes().getLength() > 1) {
             NodeList childNodes = node.getChildNodes();
             for (int a = 0; a < childNodes.getLength(); a++) {
@@ -474,9 +493,10 @@ public class miniFunctions {
                 str = str + node.getFirstChild().getNodeValue() + '\n';
             }
         }
+        return str;
     }
 
-    public static void ReadRtf(String filePath) {
+    public static String ReadRtf(String filePath) {
         String result = null;
         File file = new File(filePath);
         try {
@@ -492,6 +512,7 @@ public class miniFunctions {
             e.printStackTrace();
         }
         notepad.input.setText(result);
+        return result;
     }
 }
 
