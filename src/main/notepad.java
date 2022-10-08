@@ -182,7 +182,7 @@ public class notepad extends JFrame{
         input = new JTextPane();
 
         input.addCaretListener(new miniFunctions.emptyCheck());
-        input.setTransferHandler(new DragAndDrop());
+//        input.setTransferHandler(new DragAndDrop());
 
 
         manage.addMouseListener(new MouseAdapter() {
