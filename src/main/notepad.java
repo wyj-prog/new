@@ -83,7 +83,6 @@ public class notepad extends JFrame{
 
         //File Menu
         file = new JMenu("File");
-
         New = new JMenuItem("New            ");
         New.addActionListener(new miniFunctions.NewButton());
         open = new JMenuItem("Open");
@@ -183,6 +182,7 @@ public class notepad extends JFrame{
         input = new JTextPane();
 
         input.addCaretListener(new miniFunctions.emptyCheck());
+        input.setTransferHandler(new DragAndDrop());
 
 
         manage.addMouseListener(new MouseAdapter() {
